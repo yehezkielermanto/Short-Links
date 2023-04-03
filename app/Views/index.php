@@ -59,8 +59,20 @@
 
     <!-- ajax to shorten long url -->
     <script type="text/javascript">
+        function isValidURL(url) {
+            try {
+                new URL(url)
+                return true
+            } catch (error) {
+                return false
+            }
+        }
+
         $('#btn_generate').on('click', function() {
             let query = document.getElementById('url').value
+            if (isValidURL(query) == false) {
+                return alert('Please enter valid URL')
+            }
             $.ajax({
                 url: '/generate',
                 method: "post",
@@ -71,14 +83,17 @@
                 data: {
                     long_url: query
                 },
-                success: function(data) { 
-                    $('#result').html('Your shorten url:  ' + '<a href ='+data.mergeUrl+' target="_blank" class="underline underline-offset-1" id="valueUrl">'+ data.mergeUrl +'</a>' )
+                success: function(data) {
+                    $('#result').html('Your shorten url:  ' + '<a href =' + data.mergeUrl +
+                        ' target="_blank" class="underline underline-offset-1" id="valueUrl">' +
+                        data.mergeUrl + '</a>')
                 }
             })
+
         })
 
         // copy to clipboard
-        $('#btn_copy').on('click', function(){
+        $('#btn_copy').on('click', function() {
             let UrlValue = $('#valueUrl').text()
             navigator.clipboard.writeText(UrlValue)
             alert('Url copied to clipboard')
