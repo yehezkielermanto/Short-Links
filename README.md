@@ -11,6 +11,11 @@ Feel free join (Pull Request or make Issue) to this repository 🤗
 php -S localhost:8080
 ```
 
+## Running Migration
+```php
+php spark migrate
+```
+
 ## How to contribute?
 1. Create Issues to specify feature, error, or bug
 2. Clone this repository from **master** branch
