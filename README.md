@@ -10,3 +10,10 @@ Feel free join (Pull Request or make Issue) to this repository 🤗
 ```php 
 php -S localhost:8080
 ```
+
+## How to contribute?
+1. Create Issues to specify feature, error, or bug
+2. Clone this repository from **master** branch
+3. Checkout branch to make new branch with format "date_name" (030423_Yehezkiel)
+4. Make some code in local development
+5. Commit changes and make pull request to **dev** branch
