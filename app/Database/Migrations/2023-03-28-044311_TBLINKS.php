@@ -27,14 +27,17 @@ class TBLINKS extends Migration
             ],
             'created_at' => [
                 'type' => 'DATETIME'
+            ],
+            'updated_at' => [
+                'type' => 'DATETIME'
             ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('TB_LINKS');
+        $this->forge->createTable('tb_links');
     }
 
     public function down()
     {
-        $this->forge->dropTable('TB_LINKS');
+        $this->forge->dropTable('tb_links');
     }
 }
