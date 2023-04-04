@@ -56,7 +56,9 @@
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-
+    
+    <!-- clipboard js -->
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
     <!-- ajax to shorten long url -->
     <script type="text/javascript">
         function isValidURL(url) {
@@ -95,8 +97,16 @@
         // copy to clipboard
         $('#btn_copy').on('click', function() {
             let UrlValue = $('#valueUrl').text()
-            navigator.clipboard.writeText(UrlValue)
-            alert('Url copied to clipboard')
+            if(UrlValue){
+                new ClipboardJS('#btn_copy',{
+                    text: function(){
+                        return UrlValue
+                    }
+                })
+                alert('Url copied to clipboard')
+            }else{
+                alert('Please enter valid URL')
+            }
         })
     </script>
 </body>
