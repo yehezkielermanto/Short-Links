@@ -33,6 +33,12 @@ $routes->get('/', 'Home::index');
 $routes->post('/generate', 'Home::Generate');
 $routes->get('/:segment', 'Home::Redirect');
 
+// admin
+$routes->get('/admin/login', 'AdminController::index');
+$routes->post('/admin/login/auth', 'AdminController::auth');
+$routes->get('/admin/register', 'AdminController::register');
+$routes->post('/admin/register/store', 'AdminController::register_store');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

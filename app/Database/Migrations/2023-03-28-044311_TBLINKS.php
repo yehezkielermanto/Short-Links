@@ -18,8 +18,7 @@ class TBLINKS extends Migration
                 'auto_increment' => true
             ],
             'url_ori' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255'
+                'type' => 'TEXT',
             ],
             'url_short' => [
                 'type' => 'VARCHAR',
