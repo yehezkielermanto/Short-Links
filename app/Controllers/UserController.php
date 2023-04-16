@@ -9,7 +9,7 @@ use Config\UserAgents;
 
 use function PHPUnit\Framework\matches;
 
-class AdminController extends BaseController
+class UserController extends BaseController
 {
     protected $validation;
     protected $UsersModel;
@@ -21,18 +21,13 @@ class AdminController extends BaseController
 
     public function index()
     {
-        return view('/admin/index');
-    }
-
-    public function auth()
-    {
-        dd($this->request->getVar());
+        return view('/user/index');
     }
 
     // register new admin
     public function register()
     {
-        return view('/admin/register');
+        return view('/user/register');
     }
 
     // post register new admin
@@ -83,6 +78,45 @@ class AdminController extends BaseController
 
             session()->setFlashdata($flash_data_success);
             return redirect()->back();
+        }
+    }
+
+    // auth login user
+    public function auth()
+    {
+        $post_data = [
+            'email' => $this->request->getVar('email'),
+            'password' => $this->request->getvar('password')
+        ];
+
+        $find_data = $this->UsersModel->getUserByEmail($post_data);
+        if($find_data == true)
+        {
+            // set session user
+            session()->set(['email' => $post_data['email']]);
+            // to dashboard
+            return redirect()->to('/user/dashboard');
+        }
+        else
+        {
+            $error = ['error' => ['password' => 'Failed login, account not found!']];
+            session()->setFlashdata($error);
+            return redirect()->back()->withInput();
+        }
+
+    }
+
+    // dashboard
+    public function dashboard()
+    {
+        // get email session
+        $session = session()->get('email');
+        if(empty($session))
+        {
+            return redirect()->to('/');
+        }
+        else{
+            return view('/user/dashboard');
         }
     }
 }

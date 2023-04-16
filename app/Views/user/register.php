@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('template/header')?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- style -->
-    <link rel="stylesheet" href="/public/styles/output.css">
-    <title>Admin | Register</title>
-</head>
-
-<body>
+<?= $this->section('content')?>
     <!-- form register -->
     <div class="mx-[20%] my-[10%]">
         <!-- alert -->
@@ -32,7 +22,7 @@
         <?php endif ?>
         <div class="p-4 bg-slate-200 drop-shadow-md rounded-xl">
             <p class="font-bold text-[20px] text-center mb-[40px]">Register New User</p>
-            <form action="/admin/register/store" method="post">
+            <form action="/user/register/store" method="post">
                 <?php csrf_token(); ?>
                 <div class="flex flex-col justify-center">
                     <div class="mb-4">
@@ -67,14 +57,12 @@
                     <div class="flex flex-row justify-center items-center">
                         <button type="submit" class="bg-blue-300 p-2 w-[150px] rounded-lg">Register</button>
                     </div>
-                    <a href="/admin/login" class="text-center mt-1 underline text-[14px] text-blue-500">Login Here</a>
+                    <a href="/" class="text-center mt-1 underline text-[14px] text-blue-500">Login Here</a>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- font awesome script-->
-    <script src="https://kit.fontawesome.com/26a7f3b810.js" crossorigin="anonymous"></script>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
@@ -99,6 +87,4 @@
             }
         })
     </script>
-</body>
-
-</html>
+<?= $this->endSection()?>
