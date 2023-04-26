@@ -14,7 +14,7 @@ class Home extends BaseController
 
     public function index()
     {
-        return view('index');
+        return view('testing_link');
     }
 
     public function Generate()
@@ -27,23 +27,12 @@ class Home extends BaseController
         $data = [
             'url_ori' => $longurl,
             'url_short' => $shortUrl,
+            'user_id' => ''
         ];
 
         $this->LinksModel->insert($data);
 
         return json_encode(['long_url' => $longurl, 'mergeUrl' => $mergeUrl]);
-    }
-
-    public function RandomGenerator()
-    {
-        $length = 5;
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function Redirect()
