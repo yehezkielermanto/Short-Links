@@ -27,7 +27,6 @@ class Home extends BaseController
         $data = [
             'url_ori' => $longurl,
             'url_short' => $shortUrl,
-            'user_id' => ''
         ];
 
         $this->LinksModel->insert($data);
