@@ -24,6 +24,11 @@ class TBLINKS extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
+            'user_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
             'created_at' => [
                 'type' => 'DATETIME'
             ],
@@ -32,6 +37,7 @@ class TBLINKS extends Migration
             ]
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('user_id','tb_user', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('tb_links');
     }
 

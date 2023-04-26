@@ -40,6 +40,11 @@ $routes->post('/user/login/auth', 'UserController::auth');
 $routes->get('/user/register', 'UserController::register');
 $routes->post('/user/register/store', 'UserController::register_store');
 $routes->get('/user/dashboard', 'UserController::dashboard');
+$routes->post('/user/generate', 'UserController::generate');
+$routes->get('/user/links/(:num)', 'UserController::getAllLinks/$1');
+$routes->get('/user/logout', 'UserController::logout');
+$routes->post('/user/change', 'UserController::changeUrl');
+$routes->post('/user/delete', 'UserController::deleteUrl');
 
 /*
  * --------------------------------------------------------------------

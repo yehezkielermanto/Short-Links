@@ -36,5 +36,17 @@
     
     <!-- clipboard js -->
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+
+    <!-- script -->
+    <script type="text/javascript">
+        function validURL(url){
+            try {
+                new URL(url)
+                return true
+            } catch (error) {
+                return false
+            }
+        }
+    </script>
 </body>
 </html>

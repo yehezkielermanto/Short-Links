@@ -20,4 +20,10 @@ class UsersModel extends Model
             return false;
         }
     }
+
+    public function getUserData($data)
+    {
+        $get_user_id = $this->where(['email' => $data['email']])->first();
+        return $get_user_id['id'];
+    }
 }

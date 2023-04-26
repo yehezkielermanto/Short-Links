@@ -13,10 +13,12 @@ class UserController extends BaseController
 {
     protected $validation;
     protected $UsersModel;
+    protected $LinksModel;
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
         $this->UsersModel = new UsersModel();
+        $this->LinksModel = new LinksModel();
     }
 
     public function index()
@@ -90,10 +92,11 @@ class UserController extends BaseController
         ];
 
         $find_data = $this->UsersModel->getUserByEmail($post_data);
+        $get_data = $this->UsersModel->getUserData($post_data);
         if($find_data == true)
         {
             // set session user
-            session()->set(['email' => $post_data['email']]);
+            session()->set(['email' => $post_data['email'], 'user_id' => $get_data]);
             // to dashboard
             return redirect()->to('/user/dashboard');
         }
@@ -106,17 +109,113 @@ class UserController extends BaseController
 
     }
 
-    // dashboard
+    // logout user
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/');
+    }
+
+    // user dashboard
     public function dashboard()
     {
         // get email session
         $session = session()->get('email');
+        $id = session()->get('user_id');
         if(empty($session))
         {
             return redirect()->to('/');
         }
         else{
-            return view('/user/dashboard');
+            return view('/user/dashboard', 
+            [
+                'email' => $session, 
+                'links' => $this->LinksModel->getLinkByUser($id),
+                'pager' => $this->LinksModel->pager()
+            ]
+        );
         }
+    }
+
+    // user generate random shorten url
+    public function generate()
+    {
+        $long_url = $this->request->getVar('longUrl');
+        $short_url = $this->RandomGenerator();
+        $merge_url = base_url() . $short_url;
+        $data = [
+            'url_ori' => $long_url,
+            'url_short' => $short_url,
+            'user_id' => session()->get('user_id')
+        ];
+
+        $rules = $this->validation->setRules(
+            [
+            'url_short' => 'is_unique[tb_links.url_short]'
+            ],
+            [
+                'url_short' => [
+                    'is_unique' => 'Name already exists',
+                ],
+            ]
+        );
+
+        if($rules->run($data)){
+            // save to database
+            $this->LinksModel->insert($data);
+            return json_encode(['merge_url' => $merge_url]);
+        }        
+    }
+
+    public function getAllLinks($userId)
+    {
+        $get_links = $this->LinksModel->getLinkByUser($userId);
+        return $get_links;
+    }
+
+    // change url
+    public function changeUrl()
+    {
+        $session = session()->get('email');
+        if(empty($session))
+        {
+            return redirect()->to('/');
+        }else{
+            $url_custom = $this->request->getVar('url_custom');
+            $url_short = $this->request->getVar('url_short');
+
+            $rules = $this->validation->setRules(
+                [
+                'url_short' => 'is_unique[tb_links.url_short]'
+                ],
+                [
+                    'url_short' => [
+                        'is_unique' => 'Name already exists',
+                    ],
+                ]);
+        
+            $data = [
+                'url_short' => $url_custom
+            ];
+            if($rules->run($data)){
+                return $this->LinksModel->where('url_short', $url_short)->set($data)->update();
+                // return json_encode('Success');
+            }else{
+                $error = ['error' => ['custom_url' => 'Custom name already exists!']];
+                return session()->setFlashdata($error);
+                // return json_encode('Failed');
+            }
+
+        }
+    }
+
+    // delete url
+    public function deleteUrl()
+    {
+        $url_short = $this->request->getVar('url_short');
+        $this->LinksModel->where('url_short', $url_short)->delete();
+        $success = ['success' => ['url_short' => 'URL deleted successfully!']];
+        session()->setFlashdata($success);
+        return json_encode('Success delete url');
     }
 }

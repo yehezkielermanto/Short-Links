@@ -26,14 +26,14 @@
                 <?php csrf_token(); ?>
                 <div class="flex flex-col justify-center">
                     <div class="mb-4">
-                        <div class="flex flex-row justify-center items-center">
+                        <div class="flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs: flex-col justify-center items-center">
                             <label for="email" class="mx-4 block w-[80px]">Email</label>
                             <input type="text" name="email" id="email"
                                 class="border border-slate-300 rounded-lg w-[auto] p-1" value="<?= old('email') ?>">
                         </div>
                     </div>
                     <div class="mb-4">
-                        <div class="flex flex-row items-center justify-center">
+                        <div class="flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs: flex-col items-center justify-center">
                             <label for="password" class="mx-4 block w-[80px]">Password</label>
                             <div class="flex flex-row items-center">
                                 <input type="password" name="password" id="password"
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="mb-4">
-                        <div class="flex flex-row items-center justify-center">
+                        <div class="flex xl:flex-row lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs: flex-col items-center justify-center">
                             <label for="re_password" class="mx-4 block w-[80px]">Re-type Password</label>
                             <div class="flex flex-row items-center">
                                 <input type="password" name="re_password" id="re_password"
