@@ -20,8 +20,18 @@ class TbUser extends Migration
                 'constraint' => '255'
             ],
             'password' => [
-                'type' => 'TEXT'
+                'type' => 'TEXT',
+                'null' => true
             ],
+            'google_id' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
+            'is_verified' => [
+                'type' => 'BOOLEAN',
+                'default' => 0
+            ]
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('tb_user');

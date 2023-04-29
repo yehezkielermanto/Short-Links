@@ -14,11 +14,13 @@ class UserController extends BaseController
     protected $validation;
     protected $UsersModel;
     protected $LinksModel;
+    protected $email;
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
         $this->UsersModel = new UsersModel();
         $this->LinksModel = new LinksModel();
+        $this->email = \Config\Services::email();
     }
 
     public function index()
@@ -32,7 +34,7 @@ class UserController extends BaseController
         return view('/user/register');
     }
 
-    // post register new admin
+    //------------------------------------------------- post register new user
     public function register_store()
     {
         $data = [
@@ -75,11 +77,23 @@ class UserController extends BaseController
                 'password' => password_hash($data['re_password'], PASSWORD_BCRYPT)
             ];
 
-            $this->UsersModel->insert($data_store);
-            $flash_data_success = ['success' => 'Berhasil membuat user baru'];
+            // send email
+            try {
+                $this->email->setFrom('yehezkiel.ermanto28@gmail.com', 'yehezkiel ermanto');
+                $this->email->setTo($data_store['email']);
+                $this->email->setSubject('Short Links Email Verification');
+                $temp = view('/user/email_view', ['email' => $data_store['email']]);
+                $this->email->setMessage($temp);
+                $this->email->send();
+            } catch (\Throwable $th) {
+                dd($th);
+            }
 
-            session()->setFlashdata($flash_data_success);
-            return redirect()->back();
+            $this->UsersModel->insert($data_store);
+            // $flash_data_success = ['success' => 'Berhasil membuat user baru'];
+
+            // session()->setFlashdata($flash_data_success);
+            return view('/user/email_send');
         }
     }
 
@@ -217,5 +231,26 @@ class UserController extends BaseController
         $success = ['success' => ['url_short' => 'URL deleted successfully!']];
         session()->setFlashdata($success);
         return json_encode('Success delete url');
+    }
+
+    // verif email
+    public function verifEmail($data)
+    {
+        try {
+            // find email in database
+            $email = $this->UsersModel->where('email', $data)->first();
+            $status = "";
+            if(!empty($email)){
+                // set is_verified = 1
+                $this->UsersModel->where('email', $data)->set(['is_verified' =>  1])->update();
+                $status = 'Email verification successfully';
+                return view('/user/email_verif', ['state' => $status , 'alert' => 'bg-green-300']);
+            }else{
+                $status = 'Email verification failed';
+                return view('/user/email_verif', ['state' => $status, 'alert' => 'bg-red-300']);
+            }
+        } catch (\Throwable $th) {
+            return $th;
+        }
     }
 }
