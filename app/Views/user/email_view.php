@@ -12,8 +12,7 @@
     </head>
     <body>
         <div>
-            <p>Verification your email with link below..</p>
-            <a href="<?= base_url(); ?>index.php/verif/<?= $email ?>" class="bg-blue-300 rounded-lg p-3 my-[20px]">Click Here</a>
+            <a href="<?= base_url(); ?>index.php/verif/<?= $email ?>" class="bg-blue-300 rounded-lg p-3 my-[40px]">Click Here</a>
         </div>
     </body>
 </html>
