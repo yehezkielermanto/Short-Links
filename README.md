@@ -8,7 +8,7 @@ Feel free join (Pull Request or make Issue) to this repository 🤗
 
 ## Run using PHP Serve
 ```php 
-php -S localhost:8080
+php spark serve
 ```
 
 ## Running Migration
