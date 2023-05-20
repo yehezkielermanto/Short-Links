@@ -79,12 +79,12 @@ class UserController extends BaseController
 
             // send email
             try {
-                $this->email->setFrom('yehezkiel.ermanto28@gmail.com', 'yehezkiel ermanto');
-                $this->email->setTo($data_store['email']);
-                $this->email->setSubject('Short Links Email Verification');
-                $temp = view('/user/email_view', ['email' => $data_store['email']]);
-                $this->email->setMessage($temp);
-                $this->email->send();
+                // $this->email->setFrom('yehezkiel.ermanto28@gmail.com', 'yehezkiel ermanto');
+                // $this->email->setTo($data_store['email']);
+                // $this->email->setSubject('Short Links Email Verification');
+               $temp = view('/user/email_view', ['email' => $data_store['email']]);
+                // $this->email->setMessage($temp);
+                // $this->email->send();
             } catch (\Throwable $th) {
                 dd($th);
             }
@@ -93,7 +93,7 @@ class UserController extends BaseController
             // $flash_data_success = ['success' => 'Berhasil membuat user baru'];
 
             // session()->setFlashdata($flash_data_success);
-            return view('/user/email_send');
+            return view('/user/email_send', ["temp" => $temp]);
         }
     }
 

@@ -51,6 +51,9 @@ $routes->post('/user/email/', 'UserController::sendEmail');
 $routes->get('/user/email/view', 'UserController::viewEmail');
 $routes->get('/verif/(:segment)', 'UserController::verifEmail/$1');
 
+$routes->get('/user/testing-email', 'UserController::viewTesting');
+$routes->post('/user/kirim-email', 'UserController::testingEmail');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -8,8 +8,12 @@
     <div class="absolute w-full top-[15%] overflow-hidden">
         <div class="mx-[4%] bg-green-300 flex flex-col text-center rounded-lg p-4 drop-shadow-lg">
             <i class="fa-solid fa-circle-check text-[40px]"></i>
-            <p class="my-[10px] text-[18px]">Email verification was sent successfully... </p>
-            <p class="my-[10px] mx-[20px] p-2 bg-yellow-300 rounded-lg drop-shadow-lg">Check your inbox or spam</p>
+            <p class="my-[10px] text-[18px]">verification your account here ... </p>
+            <div class="my-[20px]">
+                <?= $temp; ?>
+            </div>
+            <!-- <p class="my-[10px] mx-[20px] p-2 bg-yellow-300 rounded-lg drop-shadow-lg">
+            </p> -->
             <a href="/" class="text-blue-600 underline mt-2">back to login</a>
         </div>
     </div>
