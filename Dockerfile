@@ -1,20 +1,38 @@
-FROM php:8.1.17-apache-bullseye
+FROM php:8-fpm
 
-RUN apt-get update && apt-get install -y --no-install-recommends git
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
 
-# Install PHP & Composer
-RUN apt update -y && DEBIAN_FRONTEND=noninteractive apt install -y curl git unzip && \
-  cd ~ && \
-  curl -sS https://getcomposer.org/installer -o composer-setup.php && \
-  php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
-  composer --version
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    libpq-dev \
+    libzip-dev 
 
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Node v16 and NPM (which is needed for the LSP)
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-  apt update -y && apt install -y nodejs
+# Install PHP extensions
+RUN docker-php-ext-install intl pdo_mysql mbstring exif pcntl bcmath gd \
+    && docker-php-ext-install -j$(nproc) pgsql \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql
 
-COPY . /app
-RUN composer update && npm install
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-EXPOSE 8080
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+# Set working directory
+WORKDIR /var/www
+
+USER $user
