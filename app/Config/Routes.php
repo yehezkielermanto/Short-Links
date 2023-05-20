@@ -46,6 +46,11 @@ $routes->get('/user/logout', 'UserController::logout');
 $routes->post('/user/change', 'UserController::changeUrl');
 $routes->post('/user/delete', 'UserController::deleteUrl');
 
+// send email to user
+$routes->post('/user/email/', 'UserController::sendEmail');
+$routes->get('/user/email/view', 'UserController::viewEmail');
+$routes->get('/verif/(:segment)', 'UserController::verifEmail/$1');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

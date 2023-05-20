@@ -2,7 +2,7 @@
 
 <?= $this->section('content') ?>
 <!-- form login -->
-<div class="mx-[20%] my-[10%]">
+<div class="md:mx-[20%] my-[10%] xs:mx-[4%]">
     <!-- alert -->
     <?php if (session()->has('error')): ?>
     <div class="bg-red-500 text-white my-2 rounded-lg p-2">
