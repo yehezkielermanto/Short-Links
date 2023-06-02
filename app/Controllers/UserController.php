@@ -15,17 +15,66 @@ class UserController extends BaseController
     protected $UsersModel;
     protected $LinksModel;
     protected $email;
+    protected $google;
+   
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
         $this->UsersModel = new UsersModel();
         $this->LinksModel = new LinksModel();
         $this->email = \Config\Services::email();
+        $this->google = new \Google\Client();
     }
 
     public function index()
     {
-        return view('/user/index');
+        $login_button = '';
+        $this->google->addScope(\Google\Service\Drive::DRIVE);
+        $this->google->setClientId(getenv("CLIENT_ID"));
+        $this->google->setClientSecret(getenv("CLIENT_SECRET"));
+        $this->google->setRedirectUri('http://localhost:8080');
+
+        $this->google->addScope('email');
+        $this->google->addScope('profile');
+        
+        if(isset($_GET["code"])){
+            $token = $this->google->fetchAccessTokenWithAuthCode($_GET["code"]);
+            
+            if(!isset($token['error']))
+            {
+                $this->google->setAccessToken($token['access_token']);
+
+                session()->set('access_token', $token['access_token']);
+
+                $google_service = new \Google\Service\Oauth2($this->google);
+
+                $data = $google_service->userinfo->get();
+
+                $current_datetime = date('Y-m-d H:i:s');
+
+                if($this->UsersModel->is_already_registered($data['id'])){
+                    //update data
+                    $user_data = array(
+                        'email_address' => $data['email'],
+                    );
+
+                    $this->UsersModel->update_user_data($user_data, $data['id']);
+                }else{
+                    //insert data
+                    $user_data = array(
+                        'google_id' => $data['id'],
+                        'email'  => $data['email'],
+                        'is_verified' => 1
+                    );
+
+                    $this->UsersModel->insert($user_data);
+                }
+            }
+        }
+        if(!session()->get('access_token')){
+            $login_button = $this->google->createAuthUrl();
+        }
+        return view('/user/index', ["login_button" => $login_button]);
     }
 
     // register new admin

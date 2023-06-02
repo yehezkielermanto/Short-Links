@@ -31,4 +31,20 @@ class UsersModel extends Model
             return false;
         }
     }
+
+    public function is_already_registered($id)
+    {
+        $google_id = $this->where(['google_id' => $id])->first();
+        if(!empty($google_id)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // update data google login
+    public function update_user_data($data, $id)
+    {
+        $this->where(['google_id' => $id])->set($data)->update();
+    }
 }

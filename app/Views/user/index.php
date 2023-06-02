@@ -47,13 +47,15 @@
         </form>
 
         <!-- login using google -->
+        <?php if(isset($login_button)): ?>
         <div class="mx-4 mt-4 border-t-2 border-slate-300 flex flex-row justify-center items-center">
-            <button class="bg-white my-3 p-2 rounded-lg flex flex-row justify-center items-center">
+            <a href="<?= $login_button; ?>" class="bg-white my-3 p-2 rounded-lg flex flex-row justify-center items-center">
                 <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
                     alt="google_logo" class="mx-1" width="25">
                 <p class="mx-1">Login</p>
-            </button>
+            </a>
         </div>
+        <?php endif;?>
     </div>
 
     <div class="text-center my-[20px]">
