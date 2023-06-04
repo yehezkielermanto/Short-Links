@@ -32,7 +32,7 @@ class UserController extends BaseController
         $this->google->addScope(\Google\Service\Drive::DRIVE);
         $this->google->setClientId(getenv("CLIENT_ID"));
         $this->google->setClientSecret(getenv("CLIENT_SECRET"));
-        $this->google->setRedirectUri(base_url());
+        $this->google->setRedirectUri(getenv("URL_CLIENT"));
 
         $this->google->addScope('email');
         $this->google->addScope('profile');
