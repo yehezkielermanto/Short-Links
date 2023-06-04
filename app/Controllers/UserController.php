@@ -50,15 +50,17 @@ class UserController extends BaseController
 
                 $data = $google_service->userinfo->get();
 
-                $current_datetime = date('Y-m-d H:i:s');
+                // $current_datetime = date('Y-m-d H:i:s');
 
+                $condition = false;
                 if($this->UsersModel->is_already_registered($data['id'])){
-                    //update data
-                    $user_data = array(
-                        'email_address' => $data['email'],
-                    );
-
-                    $this->UsersModel->update_user_data($user_data, $data['id']);
+                   
+                    $post_data = [
+                        'email' => $data['email'],
+                    ];
+                    $get_data = $this->UsersModel->getUserData($post_data);
+                    session()->set(['email' => $data['email'], 'user_id' => $get_data]);
+                    return redirect()->to('/user/dashboard');
                 }else{
                     //insert data
                     $user_data = array(
@@ -66,9 +68,14 @@ class UserController extends BaseController
                         'email'  => $data['email'],
                         'is_verified' => 1
                     );
-
+                    
                     $this->UsersModel->insert($user_data);
+                    $get_data = $this->UsersModel->getUserData($user_data);
+                    session()->set(['email' => $data['email'], 'user_id' => $get_data]);
+                    
+                    return redirect()->to('/user/dashboard');
                 }
+
             }
         }
         if(!session()->get('access_token')){
@@ -176,6 +183,7 @@ class UserController extends BaseController
     public function logout()
     {
         session()->destroy();
+        session()->remove('access_token');
         return redirect()->to('/');
     }
 
@@ -301,5 +309,15 @@ class UserController extends BaseController
         } catch (\Throwable $th) {
             return $th;
         }
+    }
+
+    // public service and policy
+    public function userPolicy()
+    {
+        return view('/public/public_policy');
+    }
+    public function userService()
+    {
+        return view('/public/public_service');
     }
 }

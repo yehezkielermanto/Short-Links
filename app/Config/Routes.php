@@ -54,6 +54,11 @@ $routes->get('/verif/(:segment)', 'UserController::verifEmail/$1');
 $routes->get('/user/testing-email', 'UserController::viewTesting');
 $routes->post('/user/kirim-email', 'UserController::testingEmail');
 
+// user privacy policy and term of services
+$routes->get('/user/policy', 'UserController::userPolicy');
+$routes->get('/user/service', 'UserController::userService');
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

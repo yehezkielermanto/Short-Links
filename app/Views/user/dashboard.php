@@ -20,7 +20,7 @@
     </button>
 
     <!-- make new links -->
-    <div class="" id="container_new">
+    <div class="hidden" id="container_new">
         <div class="bg-slate-200 drop-shadow-lg rounded-md p-3 my-[30px] mx-[4%] flex flex-col">
             <!-- generate new short url -->
             <textarea class="border-2 rounded-lg border-slate-500 width-full p-2" name="long_url" id="long_url" cols="30" rows="3"></textarea>
