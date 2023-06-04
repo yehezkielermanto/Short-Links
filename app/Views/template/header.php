@@ -20,7 +20,7 @@
     <!-- navigation bar -->
     <div class="m-4 p-4 bg-purple-500 rounded-lg text-white text-[22px]">
         <div class="flex justify-between">
-            <a href="#">Shorten Links</a>
+            <a href="/">Shorten Links</a>
             <a href="https://github.com/yehezkielermanto/Short-Links" target="_blank" class="mx-2">
                 <i class="fa-brands fa-github fa-lg"></i>
             </a>

@@ -15,17 +15,73 @@ class UserController extends BaseController
     protected $UsersModel;
     protected $LinksModel;
     protected $email;
+    protected $google;
+   
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
         $this->UsersModel = new UsersModel();
         $this->LinksModel = new LinksModel();
         $this->email = \Config\Services::email();
+        $this->google = new \Google\Client();
     }
 
     public function index()
     {
-        return view('/user/index');
+        $login_button = '';
+        $this->google->addScope(\Google\Service\Drive::DRIVE);
+        $this->google->setClientId(getenv("CLIENT_ID"));
+        $this->google->setClientSecret(getenv("CLIENT_SECRET"));
+        $this->google->setRedirectUri('http://localhost:8080');
+
+        $this->google->addScope('email');
+        $this->google->addScope('profile');
+        
+        if(isset($_GET["code"])){
+            $token = $this->google->fetchAccessTokenWithAuthCode($_GET["code"]);
+            
+            if(!isset($token['error']))
+            {
+                $this->google->setAccessToken($token['access_token']);
+
+                session()->set('access_token', $token['access_token']);
+
+                $google_service = new \Google\Service\Oauth2($this->google);
+
+                $data = $google_service->userinfo->get();
+
+                // $current_datetime = date('Y-m-d H:i:s');
+
+                $condition = false;
+                if($this->UsersModel->is_already_registered($data['id'])){
+                   
+                    $post_data = [
+                        'email' => $data['email'],
+                    ];
+                    $get_data = $this->UsersModel->getUserData($post_data);
+                    session()->set(['email' => $data['email'], 'user_id' => $get_data]);
+                    return redirect()->to('/user/dashboard');
+                }else{
+                    //insert data
+                    $user_data = array(
+                        'google_id' => $data['id'],
+                        'email'  => $data['email'],
+                        'is_verified' => 1
+                    );
+                    
+                    $this->UsersModel->insert($user_data);
+                    $get_data = $this->UsersModel->getUserData($user_data);
+                    session()->set(['email' => $data['email'], 'user_id' => $get_data]);
+                    
+                    return redirect()->to('/user/dashboard');
+                }
+
+            }
+        }
+        if(!session()->get('access_token')){
+            $login_button = $this->google->createAuthUrl();
+        }
+        return view('/user/index', ["login_button" => $login_button]);
     }
 
     // register new admin
@@ -127,6 +183,7 @@ class UserController extends BaseController
     public function logout()
     {
         session()->destroy();
+        session()->remove('access_token');
         return redirect()->to('/');
     }
 
@@ -252,5 +309,15 @@ class UserController extends BaseController
         } catch (\Throwable $th) {
             return $th;
         }
+    }
+
+    // public service and policy
+    public function userPolicy()
+    {
+        return view('/public/public_policy');
+    }
+    public function userService()
+    {
+        return view('/public/public_service');
     }
 }

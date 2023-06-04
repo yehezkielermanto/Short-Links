@@ -47,17 +47,25 @@
         </form>
 
         <!-- login using google -->
+        <?php if(isset($login_button)): ?>
         <div class="mx-4 mt-4 border-t-2 border-slate-300 flex flex-row justify-center items-center">
-            <button class="bg-white my-3 p-2 rounded-lg flex flex-row justify-center items-center">
+            <a href="<?= $login_button; ?>" class="bg-white my-3 p-2 rounded-lg flex flex-row justify-center items-center">
                 <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
                     alt="google_logo" class="mx-1" width="25">
                 <p class="mx-1">Login</p>
-            </button>
+            </a>
         </div>
+        <?php endif;?>
     </div>
 
     <div class="text-center my-[20px]">
         <a href="/link/testing" class="underline text-blue-500">Testing Short URL</a>
+    </div>
+    
+    <div class="flex items-center justify-center">
+        <div class="text-center rounded-lg bg-white drop-shadow-lg p-[15px]">
+            <p>Read <a href="/user/service" class="text-blue-500 underline underline-offset-1" target="_blank">Terms</a> & <a class="text-blue-500 underline underline-offset-1" href="/user/policy" target="_blank">Policy</a></p>
+        </div>
     </div>
 </div>
 <?= $this->endSection() ?>
